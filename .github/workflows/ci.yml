@@ -8,6 +8,11 @@ on:
   workflow_dispatch: ~
 
 jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - name: CS Fixer
+        run: docker-compose exec -T php vendor/bin/php-cs-fixer fix ./src
   tests:
     name: Tests
     runs-on: ubuntu-latest
@@ -45,7 +50,6 @@ jobs:
         run: docker compose exec -T php bin/phpunit
       - name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
-      - name: Jest
-        run: docker compose exec -T pwa yarn test --ci --passWithNoTests
-      - name: CS Fixer
-        run: docker compose exec -T php composer require --working-dir=tools/php-cs-fixer friendsofphp/php-cs-fixer
+      # - name: Jest
+      #   run: docker compose exec -T pwa yarn test --ci --passWithNoTests
+      
