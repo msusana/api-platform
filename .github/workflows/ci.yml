@@ -12,12 +12,6 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Run PHP CS Fixer
-        uses: docker://oskarstark/php-cs-fixer-ga
-        with:
-            args: --config=.php-cs-fixer.dist.php --allow-risky=yes
-      - name: Run php-cs-fixer
-        run: php-cs-fixer fix --using-cache=no --rules=@Symfony src
       - name: Checkout
         uses: actions/checkout@v2
       - name: Pull images
@@ -41,16 +35,17 @@ jobs:
       - name: Check HTTP reachability
         run: curl -v -o /dev/null http://localhost
       - name: Check HTTPS reachability
-        run: curl  -vk -o /dev/null https://cda3-devops-susana.garage404.com
+        run: curl  -vk -o /dev/null https://cda3-devops-anthony.garage404.com
       - name: Create test database
         run: |
           docker compose exec -T php bin/console -e test doctrine:database:create
           docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
-      
-      
+          docker compose exec -T php composer require --dev justinrainbow/json-schema
       - name: PHPUnit
         run: docker compose exec -T php bin/phpunit
       - name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
       - name: Jest
         run: docker compose exec -T pwa yarn test --ci --passWithNoTests
+      - name: CS Fixer
+        run: docker compose exec -T php composer require --working-dir=tools/php-cs-fixer friendsofphp/php-cs-fixer
