@@ -2,9 +2,16 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
+  pull_request: 
     branches: [master]
-  # pull_request: ~
-  # workflow_dispatch: ~
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+  workflow_dispatch: ~
 
 jobs:
   tests:
@@ -46,4 +53,4 @@ jobs:
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
       # - name: Jest
       #   run: docker compose exec -T pwa yarn test --ci --passWithNoTests
-      
+  
