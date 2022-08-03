@@ -2,16 +2,19 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-  pull_request: ~
-  workflow_dispatch: ~
+    branches: ['master']
+  # pull_request: ~
+  # workflow_dispatch: ~
 
 jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
     steps:
+      - name: pull request
+      - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
       - name: Checkout
         uses: actions/checkout@v2
       - name: Pull images
