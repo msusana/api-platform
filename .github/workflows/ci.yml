@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run php-cs-fixer
-        run: ./api/php-cs-fixer.dist.php
+        run: ./api/.php-cs-fixer.dist.php
       - name: Checkout
         uses: actions/checkout@v2
       - name: Pull images
