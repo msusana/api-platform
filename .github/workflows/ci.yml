@@ -11,7 +11,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - name: CS Fixer
+      - name: CS Fixer
         run: docker-compose exec -T php vendor/bin/php-cs-fixer fix ./src
   tests:
     name: Tests
