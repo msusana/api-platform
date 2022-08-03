@@ -12,6 +12,10 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
+      - name: Run PHP CS Fixer
+        uses: docker://oskarstark/php-cs-fixer-ga
+        with:
+        args: --config=.php-cs-fixer.dist.php --allow-risky=yes
       - name: Run php-cs-fixer
         run: php-cs-fixer fix --using-cache=no --rules=@Symfony src
       - name: Checkout
