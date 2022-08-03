@@ -19,7 +19,7 @@ class Greeting
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
-    private int $id = null;
+    private ?int $id = null;
 
     /**
      * A nice person.
