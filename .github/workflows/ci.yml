@@ -4,14 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request: 
-    branches: [master]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: pull-request
-      uses: repo-sync/pull-request@v2
-  workflow_dispatch: ~
 
 jobs:
   tests:
@@ -41,16 +33,21 @@ jobs:
       - name: Check HTTP reachability
         run: curl -v -o /dev/null http://localhost
       - name: Check HTTPS reachability
-        run: curl  -vk -o /dev/null https://cda3-devops-anthony.garage404.com
+        run: curl -v -o /dev/null https://cda3-devops-susana.garage404.com
       - name: Create test database
         run: |
           docker compose exec -T php bin/console -e test doctrine:database:create
           docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
-          docker compose exec -T php composer require --dev justinrainbow/json-schema
       - name: PHPUnit
         run: docker compose exec -T php bin/phpunit
       - name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
       # - name: Jest
       #   run: docker compose exec -T pwa yarn test --ci --passWithNoTests
-  
+      - uses: repo-sync/pull-request@v2
+        name: pull-request
+        with:
+          destination_branch: "master"                      # If blank, default: master
+          pr_title: "CI push" # Title of pull request
+          pr_body: ":crown: *An automated PR*"              # Full markdown support, requires pr_title to be set
+          github_token: ${{ secrets.GITHUB_TOKEN }}
