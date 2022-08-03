@@ -11,12 +11,17 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - name: pull request
-      - uses: actions/checkout@v3
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
       - name: Checkout
         uses: actions/checkout@v2
+      - name: pull-request
+        uses: repo-sync/pull-request@v2
+          with:
+            destination_branch: "main"
+            pr_title: "Pulling ${{ github.ref }} into main"
+            pr_body: "👑 *An automated PR*"
+            pr_reviewer: "kingdonb"
+            pr_draft: true
+            github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Pull images
         run: docker compose pull --ignore-pull-failures || true
       - name: Start services
